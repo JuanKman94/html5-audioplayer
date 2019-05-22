@@ -99,7 +99,6 @@ const initListeners = function (ap) {
   ap.controls.volume.addEventListener('change', ap.setVolume.bind(ap))
   ap.controls.seek.addEventListener('change', ap.setSongCurrentTime.bind(ap))
 
-  ap.song.addEventListener('timeupdate', ap.updateSeekBar.bind(ap))
   ap.song.addEventListener('timeupdate', ap.updateTimestamps.bind(ap))
   ap.song.addEventListener('ended', ap.onSongEnd.bind(ap))
 }
@@ -162,16 +161,13 @@ const initMethods = function (AudioPlayer) {
     this.controls.title.textContent = this.playlist[i].title
   },
 
-  AudioPlayer.prototype.updateSeekBar = function() {
-    this.controls.seek.max = this.song.duration
-    this.controls.seek.value = this.song.currentTime
-  },
-
   AudioPlayer.prototype.updateTimestamps = function(ev) {
     if (this.song.currentTime) {
+      this.controls.seek.value = this.song.currentTime
       this.controls.currentTime.textContent = this.song.currentTime.toFixed()
     }
     if (this.song.duration) {
+      this.controls.seek.max = this.song.duration
       this.controls.duration.textContent = this.song.duration.toFixed()
     }
   },
