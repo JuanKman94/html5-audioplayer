@@ -15,6 +15,7 @@ const defaultOptions = {
   labels: {
     play: '&#x25b6;',
     pause: '||',
+    playlistItem: '%N. %A - %T',
   },
   playlist: [],
   currentSong: 0,
@@ -35,13 +36,14 @@ const mergeStrategy = function(parentVal, childVal) {
     : childVal
 }
 
-const initMixin = function(AudioPlayer) {
+const initMixin = (AudioPlayer) => {
   for (let k in defaultOptions) {
     AudioPlayer.prototype[k] = defaultOptions[k]
   }
 
   // inspired by Vue
   AudioPlayer.prototype._init = function(options) {
+    console.debug('_init:', options)
     const ap = this
 
     initControls(ap, options.controls || {})
@@ -145,22 +147,32 @@ const initMethods = function(AudioPlayer) {
 
     refreshPlaylist() {
       let li = null,
-        a = null
+        a = null,
+        k = null,
+        keys = {
+          N: null, // track number
+          A: null, // artist
+          T: null, // title
+        },
+        text = null
       const songClicked = (j) => this.setSong(j, true)
       this.controls.playlist.innerHTML = ""
 
       this.playlist.forEach((el, i) => {
         li = document.createElement('li')
         a = document.createElement('a')
-        a.textContent = `${i+1} ${this.playlist[i].artist} - ${this.playlist[i].title}`
-        a.href = 'javascript:void(0)'
-        a.addEventListener('click', songClicked.bind(this, i))
+        keys = { N: i+1, A: this.playlist[i].artist, T: this.playlist[i].title }
+        text = this.labels.playlistItem
 
-        li.appendChild(a)
-        if (this.currentSong == i) {
-          li.classList.add('active')
+        for (k in keys) {
+          text = text.replace(`%${k}`, keys[k])
         }
 
+        a.textContent = text
+        a.href = 'javascript:void(0)'
+
+        a.addEventListener('click', songClicked.bind(this, i))
+        li.appendChild(a)
         this.controls.playlist.appendChild(li)
       })
     },
