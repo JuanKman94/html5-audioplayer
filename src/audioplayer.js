@@ -10,6 +10,7 @@ const defaultOptions = {
     track: document.createElement('span'),
     artist: document.createElement('span'),
     title: document.createElement('span'),
+    thumbnail: document.createElement('img'),
     playlist: document.createElement('ul'),
   },
   labels: {
@@ -43,7 +44,6 @@ const initMixin = (AudioPlayer) => {
 
   // inspired by Vue
   AudioPlayer.prototype._init = function(options) {
-    console.debug('_init:', options)
     const ap = this
 
     initControls(ap, options.controls || {})
@@ -189,6 +189,7 @@ const initMethods = function(AudioPlayer) {
       this.controls.track.textContent = i + 1
       this.controls.artist.textContent = this.playlist[i].artist
       this.controls.title.textContent = this.playlist[i].title
+      this.controls.thumbnail.src = this.playlist[i].thumbnail
     },
 
     setPlaylistActiveSong() {
