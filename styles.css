@@ -1,0 +1,137 @@
+html {
+  font: normal 16px/20px sans-serif;
+  margin: 2rem auto;
+  width: 90%;
+}
+
+.active {
+  font-weight: 600;
+}
+
+button, input {
+  cursor: pointer;
+}
+
+button {
+  background-color: #000;
+  color: #fff;
+  padding: 0.1rem 0.8rem 0.2rem;
+  margin: 0.4rem;
+  border: 1px solid #6fc3df;
+  border-radius: 5px;
+  box-shadow: 0px 0px 3px #6fc3df;
+}
+
+button:active {
+  background-color: #666;
+  color: #000;
+  border-color: #ccc;
+  box-shadow: 0px 0px 3px #0c141f;
+}
+
+footer {
+  text-align: center;
+}
+
+/******** player ********/
+/* flex: <flex-grow> <flex-shrink> <flex-basis> */
+#player {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-around;
+  align-items: flex-start;
+  align-content: space-around;
+}
+
+#controls {
+  flex: 1 1 30%;
+  order: 1;
+
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  align-items: flex-start;
+  align-content: space-around;
+}
+
+#playlist-container {
+  order: 3;
+  flex: 2 1 40%;
+}
+
+#song-info {
+  order: 2;
+  flex: 2 1 40%;
+  font-size: 0.9rem;
+
+  display: flex;
+  flex-flow: row wrap;
+  align-content: space-around;
+}
+#song-info figure {
+  flex: 1 1;
+  order: 1;
+
+  display: flex;
+  flex-flow: row nowrap;
+}
+#song-info figure img {
+  order: 1;
+  flex: 2 1;
+	max-width: 64px;
+	max-height: 64px;
+}
+#song-info figure figcaption {
+  order: 2;
+  flex: 1 1;
+  padding-left: 0.5rem;
+
+  display: flex;
+  flex-flow: column nowrap;
+}
+#song-info figure figcaption #title {
+  order: 1;
+}
+#song-info figure figcaption #artist {
+  font-size: 0.7rem;
+  order: 2;
+}
+#song-info figure figcaption #timestamps {
+  font-size: 0.85rem;
+  order: 3;
+}
+
+#song-info #seek {
+  flex: 2 1 100%;
+  order: 2;
+}
+
+#controls button { flex-grow: 2; }
+#controls button.small { flex-grow: 1; }
+
+#seek {
+  flex: 2 1 100%;
+}
+
+#volume-container {
+  flex: 2 1 100%;
+  display: flex;
+  flex-flow: row nowrap;
+}
+#volume {
+  flex: 2 1 85%;
+}
+
+#playlist-container ul {
+  order: 3;
+  list-style-type: none;
+  padding-left: 0;
+}
+#playlist-container ul li {
+  cursor: pointer;
+  margin: 0.25rem 0;
+}
+#playlist-container ul li a {
+  color: inherit;
+  text-decoration: none;
+}

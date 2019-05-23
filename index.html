@@ -2,14 +2,56 @@
 <html lang="en">
 <head>
     <title>HTML5 Audio Player</title>
-    <meta charset="UTF-8">
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <header>
         <h1>HTML5 Audio Player</h1>
     </header>
+
+    <section id=player>
+      <article id=controls>
+        <button class=small id=prev>&larr;</button>
+        <button id=toggle>||</button>
+        <button class=small id=next>&rarr;</button>
+
+        <div id=volume-container>
+          <i>&#x1f508;</i>
+          <input type=range id=volume min=0 max=100 step=2.5 value=50>
+        </div>
+      </article>
+
+      <article id=song-info>
+        <figure>
+          <img id=thumbnail alt="Song thumbnail">
+          <figcaption>
+            <span id=artist></span>
+            <span id=title></span>
+
+            <span id=timestamps>
+              <span id=currentTime></span> / <span id=duration></span>
+            </span>
+          </figcaption>
+        </figure>
+
+        <input type=range id=seek value=0 min=0 max=0 step=5>
+      </article>
+
+      <aside id=playlist-container>
+        <ul id=playlist>
+        </ul>
+      </aside>
+    </section>
+
+    <hr>
+
+    <footer>
+      <p>Songs by <a href="https://www.openbsd.org/lyrics.html">OpenBSD</a>,
+      no copyright infringement intended.
+      </p>
+    </footer>
 
     <script type="application/javascript" src="src/audioplayer.js"></script>
     <script type="application/javascript" src="main.js"></script>
