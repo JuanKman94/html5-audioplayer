@@ -154,7 +154,7 @@ const initMethods = function(AudioPlayer) {
         if (this.currentSong == i) {
           li.classList.add('active')
         }
-        li.addEventListener('click', songClick.bind(this, i))
+        li.addEventListener('click', songClicked.bind(this, i))
         this.controls.playlist.appendChild(li)
       })
     },
