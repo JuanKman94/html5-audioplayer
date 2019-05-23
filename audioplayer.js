@@ -115,6 +115,7 @@ const initMethods = function(AudioPlayer) {
   const audioPlayerMethods = {
     setPlaylist(newPlaylist) {
       this.playlist = newPlaylist
+      this.refreshPlaylist()
       this.setSong(0)
     },
 
@@ -123,7 +124,7 @@ const initMethods = function(AudioPlayer) {
       this.currentSong = i
       this.setSongInfo(i)
       this.updateTimestamps()
-      this.refreshPlaylist()
+      this.setPlaylistActiveSong()
 
       if (forcePlay && !this.isPlaying) {
         this.song.play()
@@ -144,6 +145,7 @@ const initMethods = function(AudioPlayer) {
 
     refreshPlaylist() {
       let li = null
+      const songClicked = (j) => this.setSong(j, true)
       this.controls.playlist.innerHTML = ""
 
       this.playlist.forEach((el, i) => {
@@ -152,6 +154,7 @@ const initMethods = function(AudioPlayer) {
         if (this.currentSong == i) {
           li.classList.add('active')
         }
+        li.addEventListener('click', songClick.bind(this, i))
         this.controls.playlist.appendChild(li)
       })
     },
@@ -168,6 +171,16 @@ const initMethods = function(AudioPlayer) {
       this.controls.track.textContent = i + 1
       this.controls.artist.textContent = this.playlist[i].artist
       this.controls.title.textContent = this.playlist[i].title
+    },
+
+    setPlaylistActiveSong() {
+      this.controls.playlist.childNodes.forEach((el, i) => {
+        if (i === this.currentSong) {
+          el.classList.add('active')
+        } else {
+          el.classList.remove('active')
+        }
+      })
     },
 
     updateTimestamps(ev) {
