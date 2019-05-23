@@ -144,17 +144,23 @@ const initMethods = function(AudioPlayer) {
     },
 
     refreshPlaylist() {
-      let li = null
+      let li = null,
+        a = null
       const songClicked = (j) => this.setSong(j, true)
       this.controls.playlist.innerHTML = ""
 
       this.playlist.forEach((el, i) => {
         li = document.createElement('li')
-        li.textContent = `${i+1} ${this.playlist[i].artist} - ${this.playlist[i].title}`
+        a = document.createElement('a')
+        a.textContent = `${i+1} ${this.playlist[i].artist} - ${this.playlist[i].title}`
+        a.href = 'javascript:void(0)'
+        a.addEventListener('click', songClicked.bind(this, i))
+
+        li.appendChild(a)
         if (this.currentSong == i) {
           li.classList.add('active')
         }
-        li.addEventListener('click', songClicked.bind(this, i))
+
         this.controls.playlist.appendChild(li)
       })
     },
