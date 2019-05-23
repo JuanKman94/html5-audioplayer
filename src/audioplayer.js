@@ -1,4 +1,23 @@
+/**
+ * AudioPlayer default options; all can be overriden
+ */
 const defaultOptions = {
+  /**
+   * DOM elements used for controls and labels
+   *
+   * * toggle: `<button>` used to play/pause the player
+   * * prev: `<button>` used to play the previous song
+   * * next: `<button>` used to play the next song
+   * * volume: `<input type=range>` used to change player volume
+   * * seek: `<input type=range>` used to change show/change song current playing time
+   * * currentTime: `<span>` used to display current playing time
+   * * duration: `<span>` used to show song duration
+   * * track: `<span>` used to show track number (song index in playlist)
+   * * artist: `<span>` used to show song artist
+   * * title: `<span>` used to show song title
+   * * thumbnail: `<img>` used to show song thumbnail
+   * * playlist: `[ <ul> | <ol> ]` used to show list playlist songs (`<li>`)
+   */
   controls: {
     toggle: document.createElement('button'),
     prev: document.createElement('button'),
@@ -14,13 +33,52 @@ const defaultOptions = {
     playlist: document.createElement('ul'),
   },
   labels: {
+    /**
+     * HTML text used in toggle button when player is playing
+     */
     play: '&#x25b6;',
+    /**
+     * HTML text used in toggle button when player is paused
+     */
     pause: '||',
+    /**
+     * Text used in playlist item/entry.
+     *
+     * The following special keys can be replaced with values from playlist entry
+     *
+     * ```
+     * {
+     *   '%N': "song index in playlist",
+     *   '%A': "song artist",
+     *   '%A': "song artist",
+     * }
+     * ```
+     */
     playlistItem: '%N. %A - %T',
   },
+  /**
+   * List of songs used in player
+   *
+   * The format of each entry is:
+   *
+   * ```
+   * {
+   *   src: "song URL",
+   *   artist: "song artist",
+   *   title: "song title",
+   *   thumbnail: "song thumbnail URL",
+   * }
+   * ```
+   */
   playlist: [],
+  /**
+   * Current song index in playlist
+   */
   currentSong: 0,
-  song: new Audio(),
+  /**
+   * Audio instance
+   */
+  player: new Audio(),
 }
 
 function pad(n, width, z) {
@@ -56,11 +114,11 @@ const initMixin = (AudioPlayer) => {
       ap.currentSong = options.currentSong
     }
 
-    if (! (ap.song instanceof Audio)) {
+    if (! (ap.player instanceof Audio)) {
       if (ap.playlist.length > 0) {
-        ap.song = new Audio(ap.playlist[ap.currentSong].src)
+        ap.player = new Audio(ap.playlist[ap.currentSong].src)
       } else {
-        ap.song = new Audio()
+        ap.player = new Audio()
       }
     }
 
@@ -75,10 +133,10 @@ const initProperties = function(AudioPlayer) {
    * Return whether the audio player is not paused
    *
    * This is a virtual property that updates the toggle button
-   * @return True if audio is being played, false otherwise
+   * @return {boolean} True if audio is being played, false otherwise
    */
   isPlaying.get = function() {
-    if (this.song.paused) {
+    if (this.player.paused) {
       this.controls.toggle.innerHTML = this.labels.play
       return false
     } else {
@@ -109,42 +167,62 @@ const initListeners = function(ap) {
   ap.controls.volume.addEventListener('change', ap.setVolume.bind(ap))
   ap.controls.seek.addEventListener('change', ap.setSongCurrentTime.bind(ap))
 
-  ap.song.addEventListener('timeupdate', ap.updateTimestamps.bind(ap))
-  ap.song.addEventListener('ended', ap.onSongEnd.bind(ap))
+  ap.player.addEventListener('timeupdate', ap.updateTimestamps.bind(ap))
+  ap.player.addEventListener('ended', ap.onSongEnd.bind(ap))
 }
 
 const initMethods = function(AudioPlayer) {
   const audioPlayerMethods = {
+    /**
+     * Set playlist
+     *
+     * @param {array} newPlaylist Array of objects
+     */
     setPlaylist(newPlaylist) {
       this.playlist = newPlaylist
       this.refreshPlaylist()
       this.setSong(0)
     },
 
+    /**
+     * Set current song
+     *
+     * @param {number} i song index
+     * @param {boolean} forcePlay if True, play song
+     */
     setSong(i, forcePlay) {
-      this.song.src = this.playlist[i].src
+      this.player.src = this.playlist[i].src
       this.currentSong = i
       this.setSongInfo(i)
       this.updateTimestamps()
       this.setPlaylistActiveSong()
 
       if (forcePlay && !this.isPlaying) {
-        this.song.play()
+        this.player.play()
       }
     },
 
+    /**
+     * Play next song
+     */
     playNextSong() {
       if (this.currentSong < (playlist.length - 1)) {
         this.setSong(this.currentSong + 1, true)
       }
     },
 
+    /**
+     * Play previous song
+     */
     playPrevSong() {
       if (this.currentSong > 0) {
         this.setSong(this.currentSong - 1, true)
       }
     },
 
+    /**
+     * Update `controls.playlist` control with `playlist` entries
+     */
     refreshPlaylist() {
       let li = null,
         a = null,
@@ -177,6 +255,9 @@ const initMethods = function(AudioPlayer) {
       })
     },
 
+    /**
+     * Play next song or loop if last song ended
+     */
     onSongEnd() {
       if (this.currentSong === (this.playlist.length - 1)) {
         this.setSong(0, true)
@@ -185,6 +266,9 @@ const initMethods = function(AudioPlayer) {
       }
     },
 
+    /**
+     * Update label controls with current song data
+     */
     setSongInfo(i) {
       this.controls.track.textContent = i + 1
       this.controls.artist.textContent = this.playlist[i].artist
@@ -192,6 +276,9 @@ const initMethods = function(AudioPlayer) {
       this.controls.thumbnail.src = this.playlist[i].thumbnail
     },
 
+    /**
+     * Update playlist entries to add `active` CSS class to current song
+     */
     setPlaylistActiveSong() {
       this.controls.playlist.childNodes.forEach((el, i) => {
         if (i === this.currentSong) {
@@ -202,48 +289,65 @@ const initMethods = function(AudioPlayer) {
       })
     },
 
+    /**
+     * Update `controls.seek` and `controls.currentTime`
+     */
     updateTimestamps(ev) {
       const timeZero = '00:00'
 
-      if (this.song.currentTime) {
-        this.controls.seek.value = this.song.currentTime
-        this.controls.currentTime.textContent = this.formatSongTime(this.song.currentTime)
+      if (this.player.currentTime) {
+        this.controls.seek.value = this.player.currentTime
+        this.controls.currentTime.textContent = this.formatSongTime(this.player.currentTime)
       } else {
         this.controls.currentTime.textContent = timeZero
       }
-      if (this.song.duration) {
-        this.controls.seek.max = this.song.duration
-        this.controls.duration.textContent = this.formatSongTime(this.song.duration)
+      if (this.player.duration) {
+        this.controls.seek.max = this.player.duration
+        this.controls.duration.textContent = this.formatSongTime(this.player.duration)
       } else {
         this.controls.duration.textContent = timeZero
       }
     },
 
+    /**
+     * Set player's current time
+     *
+     * @param {Event} ev Tested with `input[type=range]` change event
+     */
     setSongCurrentTime(ev) {
-      if (this.song) {
-        this.song.currentTime = ev.target.value
-      }
+      this.player.currentTime = ev.target.value
     },
 
+    /**
+     * Set player's volume
+     *
+     * @param {Event} ev Tested with `input[type=range]` change event
+     */
     setVolume(ev) {
       let val = ev.target.value
       while (val > 1) {
         val /= 100
       }
 
-      if (this.song) {
-        this.song.volume = val
+      if (this.player) {
+        this.player.volume = val
       }
     },
 
+    /**
+     * Play/Pause player
+     */
     togglePlay(ev) {
       if (this.isPlaying) {
-        this.song.pause()
+        this.player.pause()
       } else {
-        this.song.play()
+        this.player.play()
       }
     },
 
+    /**
+     * Format number into MM:SS string
+     */
     formatSongTime(t) {
       const s = (t % 60).toFixed()
       const m = (t / 60).toFixed()
@@ -257,6 +361,9 @@ const initMethods = function(AudioPlayer) {
   }
 }
 
+/**
+ * AudioPlayer constructor
+ */
 function AudioPlayer (options) {
   options = options || {}
   this._init(options)
