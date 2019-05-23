@@ -15,7 +15,7 @@ const playlist = [
 let ap = null
 
 window.addEventListener('DOMContentLoaded', (ev) => {
-  const DEFAULT_VOLUME = 50
+  const DEFAULT_VOLUME = 25
   ap = new AudioPlayer({
     controls: {
       toggle: document.querySelector('#toggle'),
@@ -36,5 +36,6 @@ window.addEventListener('DOMContentLoaded', (ev) => {
     },
   })
 
-  ap.setVolume(DEFAULT_VOLUME)
+  ap.player.volume = DEFAULT_VOLUME / 100
+  ap.controls.volume.value = DEFAULT_VOLUME
 })
