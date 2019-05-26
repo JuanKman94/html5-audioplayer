@@ -119,7 +119,7 @@ footer {
   flex-flow: row nowrap;
 }
 #volume {
-  flex: 2 1 85%;
+  flex: 2 1 75%;
 }
 
 #playlist-container ul {

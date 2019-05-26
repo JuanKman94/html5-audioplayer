@@ -23,6 +23,7 @@ const defaultOptions = {
     prev: document.createElement('button'),
     next: document.createElement('button'),
     volume: document.createElement('input'),
+    volumePerc: document.createElement('span'),
     seek: document.createElement('input'),
     currentTime: document.createElement('span'),
     duration: document.createElement('span'),
@@ -324,13 +325,18 @@ const initMethods = function(AudioPlayer) {
      * @param {Event} ev Tested with `input[type=range]` change event
      */
     setVolume(ev) {
-      let val = ev.target.value
+      let val = (ev.target !== undefined)
+          ? ev.target.value
+          : ev
       while (val > 1) {
         val /= 100
       }
 
       if (this.player) {
         this.player.volume = val
+
+        let str = new Number(this.player.volume * 100).toFixed(1)
+        this.controls.volumePerc.textContent = `${str}%`
       }
     },
 

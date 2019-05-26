@@ -22,6 +22,7 @@ window.addEventListener('DOMContentLoaded', (ev) => {
       prev: document.querySelector('#prev'),
       next: document.querySelector('#next'),
       volume: document.querySelector('#volume'),
+      volumePerc: document.querySelector('#volume_perc'),
       seek: document.querySelector('#seek'),
       currentTime: document.querySelector('#currentTime'),
       duration: document.querySelector('#duration'),
@@ -38,4 +39,19 @@ window.addEventListener('DOMContentLoaded', (ev) => {
 
   ap.player.volume = DEFAULT_VOLUME / 100
   ap.controls.volume.value = DEFAULT_VOLUME
+
+  const hotkeys = {
+    'Space': function() { ap.togglePlay() },
+    'ArrowUp': function() { ap.setVolume(ap.player.volume+0.025) },
+    'ArrowRight': function() { ap.playNextSong() },
+    'ArrowDown': function() { ap.setVolume(ap.player.volume-0.025) },
+    'ArrowLeft': function() { ap.playPrevSong() },
+  }
+
+  document.addEventListener('keydown', (ev) => {
+    if (hotkeys[ev.code]) {
+      ev.preventDefault();
+      hotkeys[ev.code]()
+    }
+  })
 })
