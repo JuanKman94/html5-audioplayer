@@ -57,6 +57,9 @@ const defaultOptions = {
      */
     playlistItem: '%N. %A - %T',
   },
+  cache: {
+    song: null,
+  },
   /**
    * List of songs used in player
    *
@@ -201,6 +204,9 @@ const initMethods = function(AudioPlayer) {
       if (forcePlay && !this.isPlaying) {
         this.player.play()
       }
+
+      // reset cache
+      this.cache.song = null
     },
 
     /**
@@ -295,17 +301,25 @@ const initMethods = function(AudioPlayer) {
      */
     updateTimestamps(ev) {
       const timeZero = '00:00'
+      let diff = 0
 
-      if (this.player.currentTime) {
+      if (this.player.currentTime && this.player.duration) {
         this.controls.seek.value = this.player.currentTime
+        this.controls.seek.max = this.player.duration
+
         this.controls.currentTime.textContent = this.formatSongTime(this.player.currentTime)
+        this.controls.duration.textContent = this.formatSongTime(this.player.duration)
+
+        // eager load next song
+        diff = this.player.duration - this.player.currentTime
+        if (diff < 15
+          && this.currentSong < (this.playlist.length - 1)
+          && this.cache.song == null
+        ) {
+          this.cache.song = new Audio(this.playlist[this.currentSong+1].src)
+        }
       } else {
         this.controls.currentTime.textContent = timeZero
-      }
-      if (this.player.duration) {
-        this.controls.seek.max = this.player.duration
-        this.controls.duration.textContent = this.formatSongTime(this.player.duration)
-      } else {
         this.controls.duration.textContent = timeZero
       }
     },
@@ -335,8 +349,9 @@ const initMethods = function(AudioPlayer) {
       if (this.player) {
         this.player.volume = val
 
-        let str = new Number(this.player.volume * 100).toFixed(1)
-        this.controls.volumePerc.textContent = `${str}%`
+        let v = new Number(this.player.volume * 100).toFixed(1)
+        this.controls.volumePerc.textContent = `${v}%`
+        this.controls.volume.value = v
       }
     },
 
