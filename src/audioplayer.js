@@ -356,7 +356,7 @@ const initMethods = function(AudioPlayer) {
      */
     formatSongTime(t) {
       const s = (t % 60).toFixed()
-      const m = (t / 60).toFixed()
+      const m = Math.floor(t / 60)
 
       return `${pad(m, 2)}:${pad(s,2)}`
     },
