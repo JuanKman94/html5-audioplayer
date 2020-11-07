@@ -213,7 +213,7 @@ const initMethods = function(AudioPlayer) {
      * Play next song
      */
     playNextSong() {
-      if (this.currentSong < (playlist.length - 1)) {
+      if (this.currentSong < (this.playlist.length - 1)) {
         this.setSong(this.currentSong + 1, true)
       }
     },
