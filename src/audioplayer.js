@@ -33,15 +33,18 @@ const defaultOptions = {
     thumbnail: document.createElement('img'),
     playlist: document.createElement('ul'),
   },
+
   labels: {
     /**
      * HTML text used in toggle button when player is playing
      */
     play: '&#x25b6;',
+
     /**
      * HTML text used in toggle button when player is paused
      */
     pause: '||',
+
     /**
      * Text used in playlist item/entry.
      *
@@ -57,9 +60,11 @@ const defaultOptions = {
      */
     playlistItem: '%N. %A - %T',
   },
+
   cache: {
     song: null,
   },
+
   /**
    * List of songs used in player
    *
@@ -75,10 +80,12 @@ const defaultOptions = {
    * ```
    */
   playlist: [],
+
   /**
    * Current song index in playlist
    */
   currentSong: 0,
+
   /**
    * Audio instance
    */
@@ -342,8 +349,8 @@ const initMethods = function(AudioPlayer) {
       let val = (ev.target !== undefined)
           ? ev.target.value
           : ev
-      while (val > 1) {
-        val /= 100
+      if (val > 1) {
+        val = 1
       }
 
       if (this.player) {
