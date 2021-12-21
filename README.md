@@ -9,13 +9,13 @@ See the [demo](https://juankman94.github.io/html5-audioplayer/index.html)!!
 ```javascript
 const playlist = [
   {
-    src: 'assets/song61.ogg',
+    src: 'assets/song61.mp3',
     artist: 'OpenBSD',
     title: 'Winter of 95',
     thumbnail: 'https://www.openbsd.org/images/61_right.jpg',
   },
   {
-    src: 'assets/song62.ogg',
+    src: 'assets/song62.mp3',
     artist: 'OpenBSD',
     title: 'A 3 line diff',
     thumbnail: 'https://www.openbsd.org/images/62_right.gif',
@@ -24,18 +24,18 @@ const playlist = [
 
 const ap = new AudioPlayer({
   controls: {
-    toggle: document.querySelector('#toggle'), // play/pause button
-    prev: document.querySelector('#prev'),
-    next: document.querySelector('#next'),
-    volume: document.querySelector('#volume'), // volume (input[type=range])
-    seek: document.querySelector('#seek'), // song progress (time) (input[type=range])
-    currentTime: document.querySelector('#currentTime'), // song current time, e.g., 02:34
-    duration: document.querySelector('#duration'), // song duration, e.g., 04:27
-    thumbnail: document.querySelector('#thumbnail'), // img where to display the thumbnail
-    artist: document.querySelector('#artist'),
-    title: document.querySelector('#title'),
+    toggle: '#toggle', // play/pause button
+    prev: '#prev',
+    next: '#next',
+    volume: '#volume', // volume (input[type=range])
+    seek: '#seek', // song progress (time) (input[type=range])
+    currentTime: '#currentTime', // song current time, e.g., 02:34
+    duration: '#duration', // song duration, e.g., 04:27
+    thumbnail: '#thumbnail', // img where to display the thumbnail
+    artist: '#artist',
+    title: '#title',
     // <ul>/<ol> where to add the playlist entries (<li>)
-    playlist: document.querySelector('#playlist'),
+    playlist: '#playlist',
   },
   playlist: playlist,
   labels: {

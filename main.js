@@ -1,12 +1,12 @@
 const playlist = [
   {
-    src: 'assets/song61.ogg',
+    src: 'assets/song61.mp3',
     artist: 'OpenBSD',
     title: 'Winter of 95',
     thumbnail: 'https://www.openbsd.org/images/61_right.jpg',
   },
   {
-    src: 'assets/song62.ogg',
+    src: 'assets/song62.mp3',
     artist: 'OpenBSD',
     title: 'A 3 line diff',
     thumbnail: 'https://www.openbsd.org/images/62_right.gif',
@@ -18,18 +18,18 @@ window.addEventListener('DOMContentLoaded', (ev) => {
   const DEFAULT_VOLUME = 25
   ap = new AudioPlayer({
     controls: {
-      toggle: document.querySelector('#toggle'),
-      prev: document.querySelector('#prev'),
-      next: document.querySelector('#next'),
-      volume: document.querySelector('#volume'),
-      volumePerc: document.querySelector('#volume_perc'),
-      seek: document.querySelector('#seek'),
-      currentTime: document.querySelector('#currentTime'),
-      duration: document.querySelector('#duration'),
-      thumbnail: document.querySelector('#thumbnail'),
-      artist: document.querySelector('#artist'),
-      title: document.querySelector('#title'),
-      playlist: document.querySelector('#playlist'),
+      toggle: '#toggle',
+      prev: '#prev',
+      next: '#next',
+      volume: '#volume',
+      volumePerc: '#volume_perc',
+      seek: '#seek',
+      currentTime: '#currentTime',
+      duration: '#duration',
+      thumbnail: '#thumbnail',
+      artist: '#artist',
+      title: '#title',
+      playlist: '#playlist',
     },
     playlist: playlist,
     labels: {

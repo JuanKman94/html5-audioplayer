@@ -160,8 +160,14 @@ const initProperties = function(AudioPlayer) {
 }
 
 const initControls = function(ap, newControls) {
+  let control = null
+
   for (let k in defaultOptions.controls) {
-    ap.controls[k] = mergeStrategy(defaultOptions.controls[k], newControls[k])
+    control = (typeof newControls[k] === 'string')
+      ? document.querySelector(newControls[k])
+      : newControls[k]
+
+    ap.controls[k] = mergeStrategy(defaultOptions.controls[k], control)
   }
 }
 
@@ -260,10 +266,11 @@ const initMethods = function(AudioPlayer) {
           text = text.replace(`%${k}`, keys[k])
         }
 
-        a.textContent = text
-        a.href = 'javascript:void(0)'
-
         a.addEventListener('click', songClicked.bind(this, i))
+        a.dataset.src = this.playlist[i].src
+        a.href = 'javascript:void(0)'
+        a.textContent = text
+
         li.appendChild(a)
         this.controls.playlist.appendChild(li)
       })
@@ -287,7 +294,8 @@ const initMethods = function(AudioPlayer) {
       this.controls.track.textContent = i + 1
       this.controls.artist.textContent = this.playlist[i].artist
       this.controls.title.textContent = this.playlist[i].title
-      this.controls.thumbnail.src = this.playlist[i].thumbnail
+      if (this.controls.thumbnail)
+        this.controls.thumbnail.src = this.playlist[i].thumbnail
     },
 
     /**
@@ -350,13 +358,13 @@ const initMethods = function(AudioPlayer) {
           ? ev.target.value
           : ev
       if (val > 1) {
-        val = 1
+        val /= 100
       }
 
       if (this.player) {
         this.player.volume = val
 
-        let v = new Number(this.player.volume * 100).toFixed(1)
+        const v = new Number(this.player.volume * 100).toFixed(1)
         this.controls.volumePerc.textContent = `${v}%`
         this.controls.volume.value = v
       }
