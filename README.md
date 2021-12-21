@@ -9,16 +9,22 @@ See the [demo](https://juankman94.github.io/html5-audioplayer/index.html)!!
 ```javascript
 const playlist = [
   {
-    src: 'assets/song61.mp3',
+    src: 'assets/song68.mp3',
     artist: 'OpenBSD',
-    title: 'Winter of 95',
-    thumbnail: 'https://www.openbsd.org/images/61_right.jpg',
+    title: 'Hacker People',
+    thumbnail: 'https://www.openbsd.org/images/68_right.gif',
   },
   {
     src: 'assets/song62.mp3',
     artist: 'OpenBSD',
     title: 'A 3 line diff',
     thumbnail: 'https://www.openbsd.org/images/62_right.gif',
+  },
+  {
+    src: 'assets/song61.mp3',
+    artist: 'OpenBSD',
+    title: 'Winter of 95',
+    thumbnail: 'https://www.openbsd.org/images/61_right.jpg',
   },
 ]
 
